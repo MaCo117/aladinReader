@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+
+# AladinReader - SHMU Aladin forecast data extractor
+# Copyright (C) 2015 Marcel Kebisek
+# Contact: marcel.kebisek@gmail.com
+#
+# This file part of AladinReader.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#
+# NOTE: 
+# All forecast data are property of Slovak hydrometeorogical institute (SHMU)
+# and should be used under approval of SHMU. Author takes ABSOLUTELY no
+# responsibility for improper use of this program.
+
+
+
+# Horne Srnie	= 31966
+# Nemsova	= 32173
+# Brezno	= 31479
+
+lopt=false
+larg=""
+fopt=false
+farg=""
+topt=false
+targ=""
+oopt=false
+oarg=""
+dopt=false
+
+
+while getopts ':l:f:t:o:dh' opt; do
+	case "$opt" in 
+		l)
+			lopt=true 
+			larg=$OPTARG ;;
+		f)
+			if $lopt; then
+				echo "Invalid argument usage. Use -h for help."
+				exit 1
+			else
+				fopt=true
+				farg=$OPTARG
+			fi ;;
+		t)
+			topt=true
+			targ=$OPTARG ;;
+		o)
+			oopt=true
+			oarg=$OPTARG ;;
+		d)
+			dopt=true ;;
+		h)
+			printf '\n'
+			echo "usage: aladinReader.sh [-l LOCATION_CODE] [-f INPUT_FILE] [-t OUTPUT_FORMAT] [-o OUTPUT_FILE] [-h] [-d]"
+			printf '\n'
+			echo "optional arguments:"
+			echo "-h   show this help message and exit"
+			echo "-d   run in debug mode (auxiliary files will not be deleted)"
+			echo "-l   specify location code of forecast to be downloaded (default: 31966 - Horne Srnie)"
+			echo "-f   forecast will not be downloaded, file specified will be used instead. File MUST have standard shmu forecast name."
+			echo "-t   specify output format: json or xml (default: json)"
+			echo "-o   specify output file path (default: ./output.xml | ./output.json)"
+			exit 0 ;;
+	esac
+done
+
+if $fopt; then
+	LINK=$farg
+	cp $LINK image.png
+else
+	if $lopt; then
+		LOCATION=$larg
+	else
+		LOCATION=31966
+	fi
+	LINK=`python3 getLink.py $LOCATION`
+	wget $LINK -O image.png
+	if [ $? != 0 ]; then
+		echo 'Failed to download forecast image. Terminating...'
+		exit 2
+	fi
+fi
+
+
+convert image.png -crop 570x113+13+58 +repage text_temp.png
+convert image.png -crop 556x96+25+63 +repage temp.png
+
+convert text_temp.png -crop 9x6+1+97 +repage temp_min.png
+convert text_temp.png -crop 9x6+1+2 +repage temp_max.png
+convert temp.png -white-threshold 45% temp_thr.png
+
+convert image.png -crop 576x109+5+489 +repage text_press.png
+convert image.png -crop 556x96+25+492 +repage press.png
+convert text_press.png -crop 18x6+0+95 +repage press_min.png
+convert text_press.png -crop 18x6+0+0 +repage press_max.png
+convert press.png -white-threshold 70% press_thr.png
+
+convert image.png -crop 570x113+13+632 +repage text_wind.png
+convert image.png -crop 556x96+25+635 +repage wind.png
+convert text_wind.png -crop 9x6+1+0 +repage wind_max.png
+convert text_wind.png -crop 9x6+1+95 +repage wind_min.png
+
+convert image.png -crop 572x98+9+349 +repage text_prec.png
+convert image.png -crop 556x96+25+349 +repage prec.png
+convert text_prec.png -crop 14x6+0+5 +repage prec_max.png
+convert text_prec.png -crop 14x6+0+92 +repage prec_min.png
+convert prec.png -white-threshold 70% prec_thr.png
+
+
+if $topt; then
+	OUTTYPE=$targ
+else
+	OUTTYPE='json'
+fi
+
+
+if $oopt; then
+	OUTPUT=$oarg
+else
+	OUTPUT='output.'$OUTTYPE
+fi
+
+python extraction.py $LINK $OUTTYPE $OUTPUT
+
+if $dopt; then
+	exit 0
+else
+	rm text_temp.png
+	rm temp.png
+	rm temp_min.png
+	rm temp_max.png
+	rm temp_thr.png
+	rm text_press.png
+	rm press.png
+	rm press_min.png
+	rm press_max.png
+	rm press_thr.png
+	rm text_wind.png
+	rm wind.png
+	rm wind_max.png
+	rm wind_min.png
+	rm temp_corrected.png
+	rm press_corrected.png
+	rm wind_corrected.png
+	rm gusts_corrected.png
+	rm gusts_corrected1.png
+	rm gusts_corrected2.png
+	rm prec.png
+	rm prec_corrected.png
+	rm prec_corrected1.png
+	rm prec_corrected2.png
+	rm prec_max.png
+	rm prec_min.png
+	rm prec_thr.png
+	rm text_prec.png
+	rm image.png
+fi
