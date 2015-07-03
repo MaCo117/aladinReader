@@ -15,8 +15,13 @@ and pressure at resolution of 10 minutes
 * [python3.4+](https://www.python.org/download/releases/3.4.0/)
 * [imagemagick](http://www.imagemagick.org/script/index.php)
 
-## Installation
-None needed.
+## Installation [optional]
+Debian based systems may use script **install.sh** to check for required dependencies:
+```
+sudo install.sh
+```
+
+If you can resolve dependencies yourself, no other installation is required.
 
 ## Normal usage
 To download current meteogram for Horne Srnie location from SHMU website and
