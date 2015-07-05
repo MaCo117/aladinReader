@@ -136,36 +136,39 @@ fi
 
 python extraction.py $LINK $OUTTYPE $OUTPUT
 
-if $dopt; then
-	exit 0
-else
-	rm text_temp.png
-	rm temp.png
-	rm temp_min.png
-	rm temp_max.png
-	rm temp_thr.png
-	rm text_press.png
-	rm press.png
-	rm press_min.png
-	rm press_max.png
-	rm press_thr.png
-	rm text_wind.png
-	rm wind.png
-	rm wind_max.png
-	rm wind_min.png
-	rm temp_corrected.png
-	rm press_corrected.png
-	rm wind_corrected.png
-	rm gusts_corrected.png
-	rm gusts_corrected1.png
-	rm gusts_corrected2.png
-	rm prec.png
-	rm prec_corrected.png
-	rm prec_corrected1.png
-	rm prec_corrected2.png
-	rm prec_max.png
-	rm prec_min.png
-	rm prec_thr.png
-	rm text_prec.png
-	rm image.png
+if [ $? -eq 0 ]; then
+
+	if $dopt; then
+		exit 0
+	else
+		rm text_temp.png
+		rm temp.png
+		rm temp_min.png
+		rm temp_max.png
+		rm temp_thr.png
+		rm text_press.png
+		rm press.png
+		rm press_min.png
+		rm press_max.png
+		rm press_thr.png
+		rm text_wind.png
+		rm wind.png
+		rm wind_max.png
+		rm wind_min.png
+		rm temp_corrected.png
+		rm press_corrected.png
+		rm wind_corrected.png
+		rm gusts_corrected.png
+		rm gusts_corrected1.png
+		rm gusts_corrected2.png
+		rm prec.png
+		rm prec_corrected.png
+		rm prec_corrected1.png
+		rm prec_corrected2.png
+		rm prec_max.png
+		rm prec_min.png
+		rm prec_thr.png
+		rm text_prec.png
+		rm image.png
+	fi
 fi
