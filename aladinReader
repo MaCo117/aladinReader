@@ -65,7 +65,7 @@ while getopts ':l:f:t:o:dh' opt; do
 			dopt=true ;;
 		h)
 			printf '\n'
-			echo "usage: aladinReader.sh [-l LOCATION_CODE] [-f INPUT_FILE] [-t OUTPUT_FORMAT] [-o OUTPUT_FILE] [-h] [-d]"
+			echo "usage: aladinReader [-l LOCATION_CODE] [-f INPUT_FILE] [-t OUTPUT_FORMAT] [-o OUTPUT_FILE] [-h] [-d]"
 			printf '\n'
 			echo "optional arguments:"
 			echo "-h   show this help message and exit"
