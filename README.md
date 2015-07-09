@@ -53,4 +53,4 @@ responsibility for improper use of this program.
 Data acquired by using this program shall not be considered as accurate or guaranteed and should be handled adequately.
 
 ## Credits
-aladinReader was written by Marcel Kebisek (maco.kebisek@gmail.com) and is released under GNU GPL License v3.
+aladinReader was written by Marcel Kebisek (marcel.kebisek@gmail.com) and is released under GNU GPL License v3.
