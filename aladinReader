@@ -114,10 +114,10 @@ convert image.png -crop 556x96+25+635 +repage wind.png
 convert text_wind.png -crop 9x6+1+0 +repage wind_max.png
 convert text_wind.png -crop 9x6+1+95 +repage wind_min.png
 
-convert image.png -crop 572x98+9+349 +repage text_prec.png
+convert image.png -crop 576x98+5+349 +repage text_prec.png
 convert image.png -crop 556x96+25+349 +repage prec.png
-convert text_prec.png -crop 14x6+0+5 +repage prec_max.png
-convert text_prec.png -crop 14x6+0+92 +repage prec_min.png
+convert text_prec.png -crop 18x6+0+5 +repage prec_max.png
+convert text_prec.png -crop 18x6+0+92 +repage prec_min.png
 convert prec.png -white-threshold 70% prec_thr.png
 
 
